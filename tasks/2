@@ -1,0 +1,19 @@
+---
+# tasks file for filebeat
+
+- name: copy  package to tmp
+  copy: src=filebeat_1.2.3_amd64.deb dest=/home/filebeat_1.2.3_amd64.deb 
+
+- name: install filebeat client
+  shell: dpkg -i /home/filebeat_1.2.3_amd64.deb
+
+- name: create directory for certificate 
+  file: path=/etc/pki/tls/certs state=directory owner=root group=root mode=0775 recurse=yes
+
+- name: copy the certificate 
+  copy: src=logstash-forwarder.crt dest=/etc/pki/tls/certs/logstash-forwarder.crt 
+
+- name: copy the default config file
+  copy: src=filebeat.yml dest=/etc/filebeat/filebeat.yml backup=yes
+
+
